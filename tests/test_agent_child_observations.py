@@ -26,6 +26,9 @@ class ManagedPrompt:
         return f"Feature={variables['feature']}\nDocs={variables['docs']}\nQuestion={variables['message']}"
 
 
+recorded_propagated: list[list[dict]] = []
+
+
 class Client:
     def get_prompt(self, name: str, **kwargs):
         return ManagedPrompt()
@@ -37,6 +40,9 @@ class Client:
 @pytest.fixture
 def observations(monkeypatch) -> list[RecordedObservation]:
     recorded: list[RecordedObservation] = []
+    propagated: list[dict] = []
+    recorded_propagated[:] = []
+    recorded_propagated.append(propagated)
 
     @contextmanager
     def record(name: str, *, as_type: str, **kwargs):
@@ -45,11 +51,12 @@ def observations(monkeypatch) -> list[RecordedObservation]:
         yield obs
 
     @contextmanager
-    def no_attributes(**kwargs):
+    def record_attributes(**kwargs):
+        propagated.append(kwargs)
         yield
 
     monkeypatch.setattr(agent_module, "observation", record)
-    monkeypatch.setattr(agent_module, "propagate_attributes", no_attributes)
+    monkeypatch.setattr(agent_module, "propagate_attributes", record_attributes)
     monkeypatch.setattr(agent_module, "get_langfuse_client", lambda: Client())
     monkeypatch.setattr(agent_module, "tracing_enabled", lambda: True)
     return recorded
@@ -76,7 +83,9 @@ def test_run_creates_retriever_then_generation_child_observations(observations) 
     retrieval, generation = observations
     assert retrieval.updates[-1]["output"] == {"doc_count": 1}
     assert generation.kwargs["model"] == "claude-sonnet-4-5"
-    assert isinstance(generation.kwargs["prompt"], ManagedPrompt)
+    # The prompt link reaches the nested generation through propagate_attributes, not a direct argument.
+    assert "prompt" not in generation.kwargs
+    assert isinstance(recorded_propagated[0][-1]["prompt"], ManagedPrompt)
 
     final = generation.updates[-1]
     assert final["usage_details"] == {"input": result.tokens_in, "output": result.tokens_out}

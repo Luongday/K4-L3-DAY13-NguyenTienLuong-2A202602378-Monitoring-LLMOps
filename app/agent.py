@@ -116,7 +116,6 @@ class LabAgent:
             "llm-generation",
             as_type="generation",
             model=self.model,
-            prompt=prompt.managed_prompt,
             metadata=metadata,
         ) as gen:
             started_at = datetime.now(timezone.utc)
