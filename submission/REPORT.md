@@ -8,7 +8,7 @@
 - **MSSV:** 2A202602378
 - **Lớp:** K4-L3B
 - **Repository URL:** https://github.com/Luongday/K4-L3B-DAY13-NguyenTienLuong-2A202602378-Monitoring-LLMOps.git
-- **Commit SHA cuối:** `75286b3` (commit chứa toàn bộ mã nguồn, cấu hình và evidence; ảnh `evidence/01-pytest.png` chụp trên commit này)
+- **Commit SHA cuối:** `238e69a` (commit chứa toàn bộ mã nguồn, cấu hình và evidence; ảnh `evidence/01-pytest.png` chụp trên commit này)
 - **Challenge ID:** `day13-k4-l3b-monitoring-llmops-v1` (cohort K4)
 - **Tên project Langfuse cá nhân:** `day13-k4-l3b-2A202602378`
 
