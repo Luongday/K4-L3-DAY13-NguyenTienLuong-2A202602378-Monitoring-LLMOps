@@ -43,3 +43,18 @@ Validator kiểm tra cấu trúc contract; nó không thể chứng minh biểu 
 6. Tắt incident bằng `python scripts/inject_incident.py --scenario <practice_scenario> --disable`.
 
 Ảnh dashboard phải nhìn được tên panel, time range, đơn vị và threshold. Báo cáo phải dẫn lại trace ID hoặc log line dùng để giải thích thay đổi.
+
+## Dashboard local của repo này
+
+Repo có sẵn một dashboard không cần cài thêm thư viện, đọc `data/logs.jsonl` và dùng threshold trong `config/dashboard.yaml` (guardrail retrieval success lấy từ `config/slo.yaml`):
+
+```bash
+python scripts/dashboard.py                      # http://127.0.0.1:8050, tự refresh mỗi 30 giây
+python scripts/dashboard.py --port 8051          # đổi cổng nếu cổng 8050 đã dùng
+python scripts/dashboard.py --now latest --snapshot dashboard.html   # ghi một file HTML tĩnh
+```
+
+- Cửa sổ 60 phút tính từ giờ hiện tại: chụp ảnh ngay sau khi chạy workload, hoặc dùng `--now latest` để lấy mốc cuối là record log mới nhất.
+- Thêm `?theme=dark` (hoặc `light`) vào URL để ép theme.
+- Mỗi panel có bảng dữ liệu (Table view) và tooltip; dùng phím mũi tên trái/phải khi chart đang được focus.
+- Traffic `rate_per_minute` là số request chia cho khoảng thời gian từ request đầu đến request cuối (tối thiểu 1 phút), nên một đợt tải ngắn không bị pha loãng bởi phần còn lại của cửa sổ.

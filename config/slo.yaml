@@ -7,7 +7,15 @@ primary_slo:
     total_event: 'event == "request_received"'
   target_percent: 99.5
   error_budget_percent: 0.5
-  note: Học viên phải giải thích hoặc điều chỉnh ngưỡng bằng baseline của mình. Ví dụ nếu có 10,000 request trong cửa sổ 28 ngày, error budget 0.5% nghĩa là tối đa 50 request được phép không đạt SLO.
+  rationale: >-
+    Ngưỡng 3000ms lấy từ baseline của lab: request bình thường mất 150-600ms (tùy tracing bật hay tắt),
+    request khởi động lạnh đo được 1.6-2.9s, nên 3000ms nằm trên cả các request khởi động lạnh
+    mà vẫn là mức người dùng còn chấp nhận được. Target 99.5% giữ nguyên vì lab chạy 0% lỗi ở baseline.
+    Lưu ý: practice rag_slow và challenge K4 đo được 2652ms, dưới ngưỡng này, nên cần thêm alert
+    cảnh báo sớm P95 > 2000ms (xem config/alert_rules.yaml).
+  error_budget_example: >-
+    error_budget_percent = 100 - target_percent = 0.5. Với 10,000 request trong cửa sổ 28 ngày,
+    tối đa 50 request được phép lỗi hoặc chậm hơn 3000ms; request thứ 51 làm cạn budget.
 guardrails:
   error_rate_pct_max: 2
   daily_cost_usd_max: 2.5

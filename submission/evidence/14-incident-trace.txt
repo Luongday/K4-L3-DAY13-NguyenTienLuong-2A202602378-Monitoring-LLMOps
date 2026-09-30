@@ -1,0 +1,35 @@
+# Same correlation_id in Langfuse (personal project). Screenshot of the waterfall to add as evidence/14-incident-trace.png
+# Trace tree: lab-agent-run (AGENT) -> retrieval (RETRIEVER) + llm-generation (GENERATION); prompt day13-chat v1 from Langfuse in every trace
+
+group      correlation_id trace_id                            root ms retrieval ms generation ms
+baseline   req-6490060d  54413c30b19955834f34428581b08b0d        152            0           151
+baseline   req-be5a83c8  3f1523028b9e8f03b570f8ec406098c6        153            0           151
+baseline   req-61257d33  437a5ac41b1d69121b03f40589e7875a        152            1           151
+baseline   req-49a1b759  ec001538606f3f6767b8675afd7375fa        151            0           151
+baseline   req-1dee6d33  a441be4c3c47967c014999d5025ee377        152            0           151
+baseline   req-889e302d  6781ddc189f3df33549adb34c687ac80        152            0           151
+baseline   req-258bacc1  6ee243b6a07640740609f0644e0257f0        152            0           150
+baseline   req-d1414090  654cefa532d90d0b74243bc5976708db        152            1           151
+baseline   req-d0f39293  92b17b122d85ec8f25d7fa706a20c65e        152            1           151
+baseline   req-64c66e48  c0c86fc8a2df3cea2e3d4beb1e905a7b        152            1           151
+challenge  req-12aa2e37  ce9a43b8d713d3575cf8a6048280e89b       2653         2501           151
+challenge  req-fddf8995  b66db2a40620e9ab983135d7dc3bbe60       2654         2502           150
+challenge  req-fe830d7f  fbd5d96e03b3ae86e3159f1a84e08ac2       2652         2501           151
+challenge  req-54458a96  363b7b1320d810462f04a12d63c610aa       2653         2501           151
+challenge  req-1fc21eb3  6d932a24ab9f7fb049b75a9059116e75       2653         2500           151
+recovery   req-3413f64f  d5627a4d2c8f6dc254a194e30923d88a        152            1           151
+recovery   req-e0771646  e5cace88e71fafdcbb6a158960349b7e        153            0           150
+recovery   req-9c239fd8  d6d9a10904df075ed5a79a3a3fa61f99        151            0           151
+recovery   req-1e4b223e  47b1f9d89c0291cdd7e1e66700c44ab5        152            0           151
+recovery   req-3a7dd0d5  30d1c5f9481dae97835b7cc5d01a64a0        151            0           150
+recovery   req-a5a872db  abe129961653d4f9ce54f685c01c72d6        152            1           151
+recovery   req-7332192b  dbc0dc0b990d17b8948d3c9270493add        152            0           151
+recovery   req-9fe49575  e8f03b1f30c7a4244759e5302a24577f        153            0           151
+recovery   req-b1ff707f  30c9b46163e4e331be591c49f6f82eb7        151            0           150
+recovery   req-1954ee6d  6e3a9e9eb6f8a93b2c8e3982a6254039        152            1           151
+
+# Focus trace: req-12aa2e37 = trace ce9a43b8d713d3575cf8a6048280e89b
+#   retrieval      05:09:04.302 -> 05:09:06.803  (2501 ms; baseline traces 0-1 ms)
+#   llm-generation 151 ms (baseline 150-151 ms)  -> unchanged
+#   lab-agent-run  2653 ms = retrieval 2501 + generation 151 + ~1 ms other (prompt resolve, scoring)
+#   no span has level ERROR/WARNING; the delay is pure waiting inside retrieval (94% of the request time)

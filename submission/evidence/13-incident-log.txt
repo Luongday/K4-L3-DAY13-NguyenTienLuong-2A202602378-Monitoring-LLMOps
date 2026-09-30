@@ -1,0 +1,13 @@
+# Slow request picked from the incident minute (05:09 UTC): correlation_id = req-12aa2e37
+# $ grep '"correlation_id": "req-12aa2e37"' data/logs.jsonl
+
+{"service": "api", "payload": {"message_preview": "How should an engineer investigate tail latency?"}, "event": "request_received", "user_id_hash": "2f2fc5ebba0b", "feature": "monitoring", "env": "dev", "session_id": "k4-l3b-challenge-s02", "model": "claude-sonnet-4-5", "correlation_id": "req-12aa2e37", "level": "info", "ts": "2026-09-30T05:09:04.301799Z"}
+{"service": "api", "latency_ms": 2652, "ttft_ms": 50, "tokens_in": 34, "tokens_out": 166, "cost_usd": 0.002592, "quality_score": 0.9, "tool_name": "retrieval", "tool_success": true, "payload": {"answer_preview": "Starter answer. You should improve this output logic and add better quality chec..."}, "event": "response_sent", "user_id_hash": "2f2fc5ebba0b", "feature": "monitoring", "env": "dev", "session_id": "k4-l3b-challenge-s02", "model": "claude-sonnet-4-5", "correlation_id": "req-12aa2e37", "level": "info", "ts": "2026-09-30T05:09:06.955176Z"}
+
+# All challenge requests (event response_sent, minute 05:09 UTC) - every one is ~2650 ms while ttft_ms=50 and tool_success=true:
+ts            correlation_id latency_ms ttft_ms tokens_out tool_success
+05:09:06.955  req-12aa2e37        2652      50        166 True
+05:09:09.611  req-fddf8995        2653      50        170 True
+05:09:12.265  req-fe830d7f        2652      50        134 True
+05:09:14.920  req-54458a96        2652      50         85 True
+05:09:17.578  req-1fc21eb3        2652      50        135 True

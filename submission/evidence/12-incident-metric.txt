@@ -1,0 +1,11 @@
+# Challenge day13-k4-l3b-monitoring-llmops-v1 (cohort K4) - metrics from data/logs.jsonl via scripts/dashboard.py (dashboard: evidence/12-incident-metric.png, shown in local time UTC+7)
+# Phase A 05:08 UTC: baseline (incident off) | B 05:09 UTC: challenge injected + python scripts/load_test.py --challenge --concurrency 5 | C 05:10 UTC: fix applied + baseline load
+
+minute UTC phase       n  P50 ms  P95 ms  P99 ms TTFT P95  tok_in  tok_out  cost/req quality  err%
+05:08      A base     10     151     151     151       50     338     1315    0.0021   0.880   0.0
+05:09      B incident   5    2652    2653    2653       50     175      690    0.0022   0.840   0.0
+05:10      C fixed    10     151     152     152       50     338     1406    0.0022   0.880   0.0
+
+# Reading: only latency moved (P50/P95 x17: 151 -> 2652 ms). TTFT, tokens and cost per request, quality, error rate and retrieval success are unchanged,
+# so the extra ~2.5 s is added before the LLM starts streaming, not in generation. The SLO line (P95 <= 3000 ms) does not flag 2652 ms; the early-warning alert (P95 > 2000 ms, 5m) does.
+# Note: with --concurrency 5 requests are handled one after another, so load_test.py prints client-side times far above latency_ms; latency_ms from the log is the number used here.

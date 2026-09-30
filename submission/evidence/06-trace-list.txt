@@ -1,0 +1,24 @@
+# Traces created by my own workload (2 x python scripts/load_test.py) in my personal Langfuse project
+# Source: Langfuse API query (observations v2) joined with data/logs.jsonl on correlation_id. Screenshot of the Langfuse trace list: add as evidence/06-trace-list.png
+# 17 traces below have root + retrieval + generation, prompt day13-chat v1 from Langfuse (not fallback)
+
+correlation_id   trace_id                           prompt_version  prompt_source child spans
+req-53989a76     dcc5c0dc4573a8fc4f1071264661aea6   1               langfuse   GENERATION+RETRIEVER
+req-de127e40     ab4f7a9e57b174ee61136e4cd14674bc   1               langfuse   GENERATION+RETRIEVER
+req-f08d740a     e9bf48952ee1383f387612a78599b40b   1               langfuse   GENERATION+RETRIEVER
+req-1af951dc     8706ba9b2f1216748090bba9d5caee6e   1               langfuse   GENERATION+RETRIEVER
+req-8c0ca16b     dfa9e20a9f43517023deef85f54cfd2a   1               langfuse   GENERATION+RETRIEVER
+req-8497cacf     20d967cfcc55f249707e8c167a0a10fa   1               langfuse   GENERATION+RETRIEVER
+req-6218a5f2     d8b416ddad7bdf7ca1b37393521e8b3e   1               langfuse   GENERATION+RETRIEVER
+req-3e2abd25     bc3c3dd24ed7668ae7cfcfb002bbc009   1               langfuse   GENERATION+RETRIEVER
+req-95d1b3cc     1245aba7682099e35e54fe9f529418c1   1               langfuse   GENERATION+RETRIEVER
+req-b54a0a32     2b0a5fd1935ea9c668a49c1d9debe151   1               langfuse   GENERATION+RETRIEVER
+req-727c8c8c     05d1dab446e634968274d8db3b895bf4   1               langfuse   GENERATION+RETRIEVER
+req-42d151aa     117fd042653ef802d91f117a9c453ec4   1               langfuse   GENERATION+RETRIEVER
+req-3cc84d2d     a4213bbafd849fa86957b4d737fdfe63   1               langfuse   GENERATION+RETRIEVER
+req-3d8b2dd8     5a849d98556add627a317bd6879288f9   1               langfuse   GENERATION+RETRIEVER
+req-84265dea     1f2d2d226046abcae7e5aee20d1ca87b   1               langfuse   GENERATION+RETRIEVER
+req-8b2473d5     e5005c9a7529aaf1ac4261b079723f3b   1               langfuse   GENERATION+RETRIEVER
+req-66ab9645     46edd2fb3e39f1fa8aa79ff9308d74cb   1               langfuse   GENERATION+RETRIEVER
+
+# Excluded from the count (3): network to Langfuse dropped during these requests -> prompt fell back to local-v1 or the span batch was not exported: ['req-3e695602', 'req-98738bb2', 'req-a34b554e']

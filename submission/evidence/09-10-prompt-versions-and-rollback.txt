@@ -1,0 +1,20 @@
+# Prompt day13-chat: v1 (labels baseline, production) and v2 (label candidate); real traces from Langfuse
+# Screenshots to add: evidence/09-prompt-versions.png (prompt page listing v1/v2 + labels), evidence/10-prompt-rollback.png (production label before/after)
+
+# Label moves (UTC): promote production -> v2 at 04:51:49; rollback production -> v1 at 04:53:38
+# Note: the SDK caches prompts (cache_ttl_seconds=60) and serves the stale version once after TTL expiry while it refreshes in the background;
+#       so the first request after a label move can still show the old version. Evidence requests were sent after waiting >60s + a warm-up request.
+
+phase                        correlation_id trace_id                           label       ver usage(in/out) cost_usd
+label=baseline               req-e10001     fe68ee694c883734b1297bd2b32269de   baseline    1   25/125       0.00195
+label=baseline               req-e10002     17bf6984bb4e4b1ba31cb53c3343a5f8   baseline    1   25/109       0.00171
+label=baseline               req-e10003     cc77b413e00cd2338fd909241dc00574   baseline    1   25/137       0.00213
+label=candidate              req-f10001     f4eb24d925fb993d85dc786e3e55925a   candidate   2   36/145       0.002283
+label=candidate              req-f10002     4011479055410f379c8211dd2e40f636   candidate   2   36/147       0.002313
+label=candidate              req-f10003     513842e6f6afb41ecc553d9f750e2b88   candidate   2   36/109       0.001743
+production before promote    req-a10001     aa14795eeddee8bea433a38138f782ec   production  1   25/96        0.001515
+production before promote    req-a10002     1e5dd5659a4d89d698bff56f31f3177b   production  1   25/110       0.001725
+production after promote     req-b10001     7d89634a5bcb7455f6e63d1b45f7fbb2   production  2   36/178       0.002778
+production after promote     req-b10002     ef2bd4a091192f173ba6c9164b2b6505   production  2   36/134       0.002118
+production after rollback    req-c20001     b412be6775aae2d88d51cf3faba342dc   production  1   25/169       0.00261
+production after rollback    req-c20002     1e33e275bd4063be306d067963856518   production  1   25/102       0.001605

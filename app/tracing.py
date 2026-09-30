@@ -17,12 +17,20 @@ except ImportError:  # pragma: no cover - chỉ dùng khi chưa cài requirement
 
         return decorator
 
+    class _DummyObservation:
+        def update(self, **kwargs: Any) -> None:
+            return None
+
     class _DummyClient:
         def update_current_span(self, **kwargs: Any) -> None:
             return None
 
         def update_current_generation(self, **kwargs: Any) -> None:
             return None
+
+        @contextmanager
+        def start_as_current_observation(self, **kwargs: Any):
+            yield _DummyObservation()
 
     def get_client():
         return _DummyClient()
@@ -34,6 +42,15 @@ except ImportError:  # pragma: no cover - chỉ dùng khi chưa cài requirement
 
 def get_langfuse_client():
     return get_client()
+
+
+@contextmanager
+def observation(name: str, *, as_type: str, **kwargs: Any):
+    """Open a child observation under the current span; a no-op when tracing is disabled."""
+    with get_langfuse_client().start_as_current_observation(
+        name=name, as_type=as_type, **kwargs
+    ) as obs:
+        yield obs
 
 
 def tracing_enabled() -> bool:

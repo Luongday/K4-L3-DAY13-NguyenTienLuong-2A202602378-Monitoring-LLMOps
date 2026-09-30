@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 import time
 import uuid
 
@@ -7,26 +8,35 @@ from fastapi import Request
 from starlette.middleware.base import BaseHTTPMiddleware
 from structlog.contextvars import bind_contextvars, clear_contextvars
 
+from .pii import scrub_text
+
+# Client-supplied IDs end up in logs and traces: accept only short tokens that hold no PII.
+VALID_REQUEST_ID = re.compile(r"[A-Za-z0-9._-]{1,64}")
+
+
+def resolve_correlation_id(header_value: str | None) -> str:
+    if (
+        header_value
+        and VALID_REQUEST_ID.fullmatch(header_value)
+        and scrub_text(header_value) == header_value
+    ):
+        return header_value
+    return f"req-{uuid.uuid4().hex[:8]}"
+
 
 class CorrelationIdMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
-        # TODO: Clear contextvars to avoid leakage between requests
-        # clear_contextvars()
+        clear_contextvars()
 
-        # TODO: Extract x-request-id from headers or generate a new one
-        # Use format: req-<8-char-hex>
-        correlation_id = "MISSING"
-        
-        # TODO: Bind the correlation_id to structlog contextvars
-        # bind_contextvars(correlation_id=correlation_id)
-        
+        correlation_id = resolve_correlation_id(request.headers.get("x-request-id"))
+        bind_contextvars(correlation_id=correlation_id)
+
         request.state.correlation_id = correlation_id
-        
+
         start = time.perf_counter()
         response = await call_next(request)
-        
-        # TODO: Add the correlation_id and processing time to response headers
-        # response.headers["x-request-id"] = correlation_id
-        # response.headers["x-response-time-ms"] = ...
-        
+
+        response.headers["x-request-id"] = correlation_id
+        response.headers["x-response-time-ms"] = str(int((time.perf_counter() - start) * 1000))
+
         return response
