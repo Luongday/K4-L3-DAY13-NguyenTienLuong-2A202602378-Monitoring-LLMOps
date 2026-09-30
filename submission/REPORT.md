@@ -8,7 +8,7 @@
 - **MSSV:** 2A202602378
 - **Lớp:** K4-L3B
 - **Repository URL:** https://github.com/Luongday/K4-L3B-DAY13-NguyenTienLuong-2A202602378-Monitoring-LLMOps.git
-- **Commit SHA cuối:**
+- **Commit SHA cuối:** `75286b3` (commit chứa toàn bộ mã nguồn, cấu hình và evidence; ảnh `evidence/01-pytest.png` chụp trên commit này)
 - **Challenge ID:** `day13-k4-l3b-monitoring-llmops-v1` (cohort K4)
 - **Tên project Langfuse cá nhân:** `day13-k4-l3b-2A202602378`
 
@@ -123,10 +123,10 @@ Baseline ban đầu (trước khi sửa code): `evidence/00-baseline.txt`.
 
 ## 9. Checklist trước khi nộp
 
-- [ ] Kết quả và evidence thuộc commit SHA cuối.
-- [ ] Tất cả ảnh/output mở được bằng đường dẫn tương đối.
-- [ ] Incident evidence nối đúng metric → log → trace.
-- [ ] Trace/prompt evidence thuộc project Langfuse cá nhân và ảnh không lộ key/secret.
-- [ ] Repository chạy lại được theo README.
-- [ ] Không có secret, API key, PII thô hoặc evidence của người khác/lớp khác.
-- [ ] URL repo và commit SHA cuối đã được nộp trên LMS/Codelabs.
+- [x] Kết quả và evidence thuộc commit SHA cuối.
+- [x] Tất cả ảnh/output mở được bằng đường dẫn tương đối.
+- [x] Incident evidence nối đúng metric → log → trace.
+- [x] Trace/prompt evidence thuộc project Langfuse cá nhân và ảnh không lộ key/secret.
+- [x] Repository chạy lại được theo README.
+- [x] Không có secret, API key, PII thô hoặc evidence của người khác/lớp khác.
+- [x] URL repo và commit SHA cuối đã được nộp trên LMS/Codelabs.
